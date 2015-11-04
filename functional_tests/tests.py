@@ -1,9 +1,10 @@
-from django.test import LiveServerTestCase
+#from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 
-class NewVisitorTest(LiveServerTestCase):  #1
+class NewVisitorTest(StaticLiveServerTestCase):  #1
 
     def setUp(self):
     	self.browser = webdriver.Firefox()
@@ -61,6 +62,7 @@ class NewVisitorTest(LiveServerTestCase):  #1
 
         ## We use a new browser session to make sure that no information
         ## of Edith's is coming through from cookies etc #1
+        self.browser.refresh()
         self.browser.quit()
         self.browser = webdriver.Firefox()
 
