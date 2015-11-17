@@ -2,6 +2,7 @@ from django.core.urlresolvers import resolve
 from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.utils.html import escape
 
 from lists.models import Item, List
 from lists.views import home_page
@@ -58,20 +59,6 @@ class HomePageTest(TestCase):
         #self.assertIn('oh tidak', response.content.decode())
         self.assertContains(response, 'oh tidak')
 
-    #def test_home_page_displays_all_list_items(self):
-     #   Item.objects.create(text='itemey 1')
-      #  Item.objects.create(text='itemey 2')
-
-       # request = HttpRequest()
-        #response = home_page(request)
-
-        #self.assertIn('itemey 1', response.content.decode())
-        #self.assertIn('itemey 2', response.content.decode())
-
-class ListViewTest(TestCase):
-         self.assertNotContains(response, 'other list item 1')
-         self.assertNotContains(response, 'other list item 2')
-
 
 class NewListTest(TestCase):
 
@@ -92,6 +79,26 @@ class NewListTest(TestCase):
         )
         new_list = List.objects.first()
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
+
+    def test_validation_errors_are_sent_back_to_home_page_template(self):
+        response = self.client.post('/lists/new', data={'item_text': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        expected_error = escape("You can't have an empty list item")
+        self.assertContains(response, expected_error)
+        #expected_error = "You can't have an empty list item"
+        #print(response.content.decode())
+        #self.assertContains(response, expected_error)
+
+    #def test_validation_errors_are_sent_back_to_home_page_template(self):
+        #response = self.client.post('/lists/new', data={'item_text': ''})
+        #self.assertEqual(response.status_code, 200)
+        #self.assertTemplateUsed(response, 'home.html')
+#        expected_error = "You can't have an empty list item"
+#        print(response.content.decode())
+	
+        #expected_error = escape("You can't have an empty list item")
+        #self.assertContains(response, expected_error)
 
 class NewItemTest(TestCase):
 
