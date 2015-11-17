@@ -37,3 +37,4 @@ def test_cannot_save_empty_list_items(self):
         item = Item(list=list_, text='')
         with self.assertRaises(ValidationError):
             item.save()
+            item.full_clean()
