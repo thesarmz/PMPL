@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block header_text %}To-Do{% endblock %}
+{% block header_text %}Start a new To-Do ThesarMZ{% endblock %}
 
 {% block form_action %}{% url 'new_list' %}{% endblock %}
 
